@@ -2,5 +2,5 @@
 Primeiro trabalho da disciplina de Estrutura de Dados 1.
 
 Autores:
-* [@bgsthiago](github.com/bgsthiago)
-* [@chaduka](github.com/chaduka)
+* [@bgsthiago](https://github.com/bgsthiago)
+* [@chaduka](https://github.com/chaduka)
