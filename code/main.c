@@ -17,7 +17,7 @@ int main(){
   mercadorias = fopen("mercadorias.txt", "r");
   if(mercadorias != NULL){
     while(mercadorias!=EOF){
-      fscanf("%d %s %f %d", &op, tmp.nome_prod, tmp.preco, tmp.qtd);
+      fscanf(mercadorias, "%d %s %f %d", &op, tmp.nome_prod, tmp.preco, tmp.qtd);
       if(op == 1) inserirNoEstoque(estq, tmp);
       else if(op == 2) removerDoEstoque(estq, tmp);
     }
