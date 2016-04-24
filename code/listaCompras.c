@@ -15,20 +15,21 @@ return 1;
 }
 
 // Retorna 1 se deu certo e 0 caso contrario
+/*
+ FALTA REMOVER DO ESTOQUE
+*/
 int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *e){
   NO_LISTA *novo = (NO_LISTA) malloc(sizeof(NO_LISTA));
   NO_LISTA *aux = lc->inicio;
   count = 0;
   novo->prod.nomeProd = nomeProd;
   novo->prox = NULL;
+
   if(estoqueVazio(e)) return 0;
   while(nomeProd != e->item[count].nomeProd && count<=MAX) count++; //Proucurando o produto no Estoque por nome
   if (count > MAX) return 0; //Nao existe este item no Estoque
-  //Achou item no estoque
 
-  /*
-   Falta botar pra remover do Estoque
-  */
+  //Achou item no estoque
   if(e->item[count]->qtdd < quantidade)
     novo->prod.qtdd = e->item[count].qtdd;
   else
@@ -51,23 +52,28 @@ int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *
 }
 
 // Retorna 1 se deu certo e 0 caso contrario
+/*
+  FALTA COLOCAR PARA DEVOLVER PARA O ESTOQUE
+*/
 int removerCompra(LISTA_DE_COMPRA *lc, ITEM *itemRemovido, ESTOQUE *e){
-  NO_LISTA *aux = lc->inicio;
-  NO_LISTA *aux2;
-  while(aux->prod.nomeProd != itemRemovido.nomeprod && aux != NULL){ //Proucurando produto
-    aux2 = aux;
-    aux = aux->prox;
+  NO_LISTA *atual = lc->inicio;
+  NO_LISTA *anterior;
+  while(atual->prod.nomeProd != itemRemovido.nomeprod && atual != NULL){ //Proucurando produto
+    anterior = atual;
+    atual = atual->prox;
   }
-  if(aux == NULL) return 0; //Nao achou produto no ESTOQUE
+  if(atual == NULL) return 0; //Nao achou produto no ESTOQUE
   else{
-    if(itemRemovido.qtdd < aux->prod.qtdd)
+    if(itemRemovido.qtdd < atual->prod.qtdd)
       lc->total_preco -= itemRemovido.preco;
       lc->quantidade_itens -= itemRemovido.qtdd; //Atualizando a Lista_de_compra
-      aux->prod.qtdd -= itemRemovido.qtdd;
-      aux->prod.preco -= itemRemovido.preco; //Atualizando o NO_Lista
-
+      atual->prod.qtdd -= itemRemovido.qtdd;
+      atual->prod.preco -= itemRemovido.preco; //Atualizando o NO_Lista
+    /*
+     FALTA IMPLEMENTAR AQUI
+    */
     else
-      aux2->prox = aux->prox;
+      anterior>prox = atual->prox;
       free(aux);
   }
 
@@ -76,9 +82,18 @@ int removerCompra(LISTA_DE_COMPRA *lc, ITEM *itemRemovido, ESTOQUE *e){
 
 // Libera a lista. Retorna 1 se deu certo e 0 caso contrario
 int removerProdutos(LISTA_DE_COMPRA *lc){
+  if(lc->inicio == NULL) return 0;
+  NO_LISTA *atual = lc->inicio;
+  NO_LISTA *anterior;
 
-
-
+  while(atual != NULL){
+    anterior = atual;
+    atual = atual->prox;
+    free(anterior);
+  }
+  lc->inicio == NULL;
+  free (lc);
+return 1;
 }
 
 
