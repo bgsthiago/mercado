@@ -10,8 +10,15 @@ int criarListaDeEstoque(ESTOQUE *e){
 }
 
 int inserirNoEstoque(ESTOQUE *e, ITEM prod){
+  int i = 0;
   if(estoqueCheio(e)) return 0;
-  e->item[e->tamanho] = prod;
+  for(i = 0; i <= e->item[e->tamanho]; i++){
+    if(prod.nome_prod == e->item[i].nome_prod){
+      e->item[i].qtdd = prod.qtdd;
+      return 1;
+    }
+  }
+  e->item[i] = prod;
   e->tamanho++;
   return 1;
 }
@@ -28,7 +35,7 @@ int estoqueVazio(ESTOQUE *e){
 
 int removerDoEstoque(ESTOQUE *e, ITEM itemRemovido){
   int i = 0, j = 0, flag = 1;
-  
+
   while(i <= e->tamanho && flag == 1){
     if(e->item[i].nome_prod == itemRemovido.nome_prod){
       e->item[i].qtdd-= itemRemovido.qtdd;
@@ -43,6 +50,5 @@ int removerDoEstoque(ESTOQUE *e, ITEM itemRemovido){
     for(j = i; j < e->tamanho; j++)
       e->item[j] = e->item[j+1];
   }
-
   return 1;
 }
