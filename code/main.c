@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int main(){
-  int op;
+  int op, i;
 
   FILE *mercadorias;
   ESTOQUE *estq;
@@ -24,5 +24,6 @@ int main(){
   }
 
   fclose(mercadorias);
+
   return 0;
 }
