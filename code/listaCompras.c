@@ -15,7 +15,7 @@ return 1;
 }
 
 // Retorna 1 se deu certo e 0 caso contrario
-int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *e){
+/*int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *e){
   NO_LISTA *novo = (NO_LISTA) malloc(sizeof(NO_LISTA));
   NO_LISTA *aux = lc->inicio;
   count = 0;
@@ -53,57 +53,98 @@ int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *
     lc->total_preco += novo->prod.preco;
   }
 }
+*/
 
 // Retorna 1 se deu certo e 0 caso contrario
-/*
-  FALTA COLOCAR PARA DEVOLVER PARA O ESTOQUE
-*/
+int inserirCompra(LISTA_DE_COMPRA *lc, char *nomeProd, int quantidade, ESTOQUE *e){
+  NO_LISTA *novo = (NO_LISTA*) malloc(sizeof(NO_LISTA));
+  NO_LISTA *atual = lc->inicio;
+  NO_LISTA *anterior = lc->inicio;
+  int contador = 0;
+
+  //Atribuindo os valores
+  novo->prod.nomeProd = nomeProd;
+  while(strcmp(nomeProd, e->item[contador].nomeProd) != 0 && contador <= MAX) contador++;
+  if(contador > MAX) return 0; //Nao possui item no ESTOQUE
+  if(e->item[contador].qtdd <= quantidade)
+    novo->prod.qtdd = quantidade
+  else
+    novo->prod.qtdd = e->item[contador].qtdd;
+
+  novo->prod.preco = e->item[contador].preco;
+  novo->prox = NULL;
+
+  //Se LISTA_DE_COMPRA vazia
+  if(lc->inicio == NULL){
+    lc->inicio = novo;
+    removerDoEstoque(e, novo->prod);
+  }
+  //Inserindo ordenado
+  else{
+    //Se primeiro nome > nomeProd insereInicio
+    if(strcmp(atual->prod.nomeProd, nomeProd) > 0){
+     novo->prox = aux;
+     lc->inicio = novo;
+     removerDoEstoque(e, novo->prod);
+   }
+   else{
+     while((strcmp(atual->prod.nomeProd, nomeProd) < 0) && atual != NULL){
+       anterior = atual;
+       atual = atual->prox;
+     }
+     //Se ultimo nome < nomeProd insereFim
+     if(atual == NULL){
+       anterior->prox = novo;
+       removerDoEstoque(e, novo->prod);
+     }
+     //Se produto já existe na LISTA_DE_COMPRA
+     if(strcmp(atual->prod.nomeProd, nomeProd) == 0){
+       atual->prod.qtdd += quantidade;
+       removerDoEstoque(e, novo->prod);
+     }
+     else{
+       anterior->prox = novo;
+       novo->prox = atual;
+       removerDoEstoque(e, novo->prod);
+     }
+   }
+ }
+}
+
+// Retorna 1 se deu certo e 0 caso contrario
 int removerCompra(LISTA_DE_COMPRA *lc, ITEM *itemRemovido, ESTOQUE *e){
   NO_LISTA *atual = lc->inicio;
-  NO_LISTA *anterior;
-  int contador;
+  NO_LISTA *anterior = lc->inicio;
+
+  if(lc->inicio == NULL) return 0; //LISTA_DE_COMPRA vazia
   while((strcmp(atual->prod.nomeProd, itemRemovido.nomeprod) != 0 ) && atual != NULL){ //Proucurando produto
     anterior = atual;
     atual = atual->prox;
   }
   if(atual == NULL) return 0; //Nao achou produto na LISTA_DE_COMPRA
   else{
+    itemRemovido.preco = atual->prod.preco;
     //Se quantidade requisitada MENOR que qtdd existente
     if(itemRemovido.qtdd < atual->prod.qtdd)
-      //Devolvendo ao estoque
-      contador = 0;
-      while((strcmp(itemRemovido.nomeProd, e->item[contador].nomeProd) != 0 ) && contador <= MAX) contador++;
-
-      //Se não tiver produto no Estoque adicionar novamente.
-      /*if (contador > MAX){
-      }*/
-      else
-        e->item[contador].qtdd += itemRemovido.qtdd;
-      //Fim devolvendo ao estoque
-
-      lc->total_preco -= itemRemovido.preco;
-      lc->quantidade_itens -= itemRemovido.qtdd; //Atualizando a Lista_de_compra
-      atual->prod.qtdd -= itemRemovido.qtdd;
-      atual->prod.preco -= itemRemovido.preco; //Atualizando o NO_Lista
-
-    //Se quantidade requistada MAIOR que qtdd existente
+      inserirNoEstoque(e, itemRemovido);
+    //Se quantidade requisitada MAIOR que qtdd existente
     else{
-      contador = 0;
-      while((strcmp(itemRemovido.nomeProd, e->item[contador].nomeProd) != 0 ) && contador <= MAX) contador++;
-      //Se não tiver produto no Estoque adicionar novamente.
-      /*if (contador > MAX){
-      }*/
-      else
-        e->item[contador].qtdd += atual->prod.qtdd;
-
-      anterior->prox = atual->prox;
-      lc->total_preco -= atual->prod.preco;
-      lc->quantidade_itens -= atual->prod.qtdd;
-      free(atual);
+      itemRemovido.qtdd = atual->prod.qtdd;
+      inserirNoEstoque(e, itemRemovido);
+      //Apagando alocação de memoria
+      if(lc->inicio != atual){
+        anterior->prox = atual->prox;
+        free(atual);
+      }
+      else{
+        lc->inicio = atual->prox;
+        free(atual);
+      }
     }
   }
-
-
+  lc->total_preco -= (itemRemovido.preco)*(itemRemovido.qtdd);
+  lc->quantidade_itens -= itemRemovido.qtdd;
+return 1;
 }
 
 // Libera a lista. Retorna 1 se deu certo e 0 caso contrario
@@ -126,8 +167,18 @@ int removerProdutos(LISTA_DE_COMPRA *lc){
 return 1;
 }
 
-
+/*
+  PASSAR PARA ARQUIVO
+*/
 void imprimeCompra(LISTA_DE_COMPRA *lc){
-
+  NO_LISTA *aux = lc->inicio;
+  if(lista->incio == NULL) printf("Lista Vazia");
+  else{
+    while(aux != NULL){
+      aux = aux->prox;
+      printf(“\n %s\t %d x %.2f = %.2f”, aux->prod.nomeProd, aux->prod.qtdd, (aux->prod.preco)/(aux->prod.qtdd), aux->prod.preco);
+    }
+    printf(“\n Número de itens: %d \n Total a ser pago: R$ %.2f\n\n”, lc->quantidade_itens, lc->total_preco);
+  }
 
 }
