@@ -1,4 +1,4 @@
-/* Estrutura do estoque */
+	/* Estrutura do estoque */
 #ifndef _estrutura_h
 #define _estrutura_h
 
@@ -6,7 +6,7 @@
 
 
 typedef struct item {
-	
+
 	char *nome_prod;
 	float preco;
 	int qtdd;
@@ -21,7 +21,7 @@ typedef struct estoque {
 } ESTOQUE;
 
 
-int criarListaDeEstoque(ESTOQUE *e); 
+int criarListaDeEstoque(ESTOQUE *e);
 
 int inserirNoEstoque(ESTOQUE *e, ITEM prod); // Retorna 1 se deu certo e 0 caso contrario
 
