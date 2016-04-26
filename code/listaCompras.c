@@ -1,5 +1,5 @@
 #include "listaCompras.h"
-#include "estrutura.h"
+#include "estoque.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -10,8 +10,8 @@ int criarListaDeCompra(LISTA_DE_COMPRA *lc){
 
   lc->quantidade_itens = 0;
   lc->total_preco = 0;
-  lc->inicio == NULL;
-return 1;
+  lc->inicio = NULL;
+  return 1;
 }
 
 // Retorna 1 se deu certo e 0 caso contrario
