@@ -92,6 +92,14 @@ int removerDoEstoque(ESTOQUE *e, ITEM itemRemovido){
   if(e->item[i].qtdd <= 0){
     for(j = i; j < e->tamanho; j++)
       e->item[j] = e->item[j+1];
+    e->tamanho--;
   }
   return 1;
+}
+
+void listar(ESTOQUE *e){
+  int i;
+  for(i = 0; i < e->tamanho; i++){
+    printf("%s %.2f %d\n", e->item[i].nome_prod, e->item[i].preco, e->item[i].qtdd);
+  }
 }
