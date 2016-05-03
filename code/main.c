@@ -21,7 +21,7 @@ int main(){
 			if (opcao == 'S' || opcao == 's'){
 	 			scanf("%d", &quantidade);
 
-	 			if (qtd == 0){
+	 			if (quantidade == 0){
 	 				imprimeCompra(&lc);
 	 				removerProdutos(&lc);
 	 				break;
@@ -31,7 +31,7 @@ int main(){
 	 			scanf("%s", prod);
 
 	 			if (quantidade > 0){
-	 				inserirCompra(&lc, prod, qtd, &e);
+	 				inserirCompra(&lc, prod, quantidade, &e);
 	 			}
         else if (quantidade < 0){
 	 				ITEM rem;
